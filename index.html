@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generative sketch</title> <!--input name art-->
+
+    <!--
+    Generative supports the most popular creative coding libraries. Simply uncomment the library you want to use below.
+    Are we missing an important library? Let us know @generative_xyz.
+    -->
+    <script sandbox="allow-scripts" type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
+
+
+    <!-- c2.min.js@1.0.0
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdn.generative.xyz/ajax/libs/c2/1.0.0/c2.min.js"></script>
+    -->
+
+    <!-- chromajs@2.4.2
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
+    -->
+
+    <!-- p5.grain.js@0.6.1
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdn.generative.xyz/ajax/libs/p5.grain/0.6.1/p5.grain.min.js"></script>
+    -->
+
+    <!-- threejs@r124
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r124/three.min.js"></script>
+    -->
+
+    <!-- tonejs@14.8.49
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    -->
+
+    <!-- svgjs@3.1.2
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.2/svg.min.js"></script>
+    -->
+
+    <!-- aframejs@1.2.0
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.2.0/aframe.min.js"></script>
+    -->
+
+    <!-- babylonjs@5.47.0
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babylonjs/5.47.0/babylon.js"></script>
+    -->
+
+    <!-- paperjs@0.12.17
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.17/paper-full.min.js"></script>
+    -->
+
+    <!-- regljs@2.1.0
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.0/regl.min.js"></script>
+    -->
+    <script sandbox="allow-scripts" type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
+    <script type="text/javascript">
+
+        // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ Add your script here ↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+        //
+        //
+        //
+        // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ Add your script here ↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+    </script>
+
+    <script id="snippet-random-code" type="text/javascript">
+
+        // DO NOT EDIT THIS SECTION
+
+        let seed = window.location.href.split('/').find(t => t.includes('i0'));
+
+        if (seed == null) {
+            const alphabet = "0123456789abcdefghijklmnopqrstuvwsyz";
+            seed = new URLSearchParams(window.location.search).get("seed") || Array(64).fill(0).map(_ => alphabet[(Math.random() * alphabet.length) | 0]).join('') + "i0";
+        } else {
+            let pattern = "seed=";
+            for (let i = 0; i < seed.length - pattern.length; ++i) {
+                if (seed.substring(i, i + pattern.length) == pattern) {
+                    seed = seed.substring(i + pattern.length);
+                    break;
+                }
+            }
+        }
+
+        function cyrb128($) {
+            let _ = 1779033703, u = 3144134277, i = 1013904242, l = 2773480762;
+            for (let n = 0, r; n < $.length; n++) _ = u ^ Math.imul(_ ^ (r = $.charCodeAt(n)), 597399067), u = i ^ Math.imul(u ^ r, 2869860233), i = l ^ Math.imul(i ^ r, 951274213), l = _ ^ Math.imul(l ^ r, 2716044179);
+            return _ = Math.imul(i ^ _ >>> 18, 597399067), u = Math.imul(l ^ u >>> 22, 2869860233), i = Math.imul(_ ^ i >>> 17, 951274213), l = Math.imul(u ^ l >>> 19, 2716044179), [(_ ^ u ^ i ^ l) >>> 0, (u ^ _) >>> 0, (i ^ _) >>> 0, (l ^ _) >>> 0]
+        }
+
+        function sfc32($, _, u, i) {
+            return function () {
+                u >>>= 0, i >>>= 0;
+                let l = ($ >>>= 0) + (_ >>>= 0) | 0;
+                return $ = _ ^ _ >>> 9, _ = u + (u << 3) | 0, u = (u = u << 21 | u >>> 11) + (l = l + (i = i + 1 | 0) | 0) | 0, (l >>> 0) / 4294967296
+            }
+        }
+
+
+        // IMPORTANT: Instead of Math.random(), use this function mathRand() for random number generation.
+        // This function generates a random number between 0 and 1 with on-chain seed.
+
+        let mathRand = sfc32(...cyrb128(seed));
+
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            position: fixed;
+            display: block;
+            margin: auto;
+            overflow: auto;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+<canvas id="canvas" style="display: block;
+                        max-width: 100%;
+                        max-height: 100%;
+                        margin: auto;
+                        overflow: auto;
+                        position: fixed;
+                        object-fit: contain;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;"></canvas>
+<script type="text/javascript">
+    //for production mathRand()
+    //for testnet Math.random()
+    const chainHash = Math.random();
+
+
+    // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ Add traits here ↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+    let colors = [
+        ['black', 5, '#000'],
+        ['white', 10, '#fff'],
+        ['red', 200, '#fff000'],
+    ]
+
+    const outx = traits(colors, chainHash);
+
+    // window.$generativeTraits contain list traits for token
+    // you need to populate a $generativeTraits object in the window object
+    window.$generativeTraits = {
+        "Colour": outx[0],
+    }
+    console.log(window.$generativeTraits)
+
+    // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ Add traits here ↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+
+    //License: Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+    //core functions
+    function randomValueIndexArrayInt(hash, lenArray) {
+        return hash % lenArray;
+    }
+
+    function cyrb128(str) {
+        let h1 = 1779033703, h2 = 3144134277,
+            h3 = 1013904242, h4 = 2773480762;
+        for (let i = 0, k; i < str.length; i++) {
+            k = str.charCodeAt(i);
+            h1 = h2 ^ Math.imul(h1 ^ k, 597399067);
+            h2 = h3 ^ Math.imul(h2 ^ k, 2869860233);
+            h3 = h4 ^ Math.imul(h3 ^ k, 951274213);
+            h4 = h1 ^ Math.imul(h4 ^ k, 2716044179);
+        }
+        h1 = Math.imul(h3 ^ (h1 >>> 18), 597399067);
+        h2 = Math.imul(h4 ^ (h2 >>> 22), 2869860233);
+        h3 = Math.imul(h1 ^ (h3 >>> 17), 951274213);
+        h4 = Math.imul(h2 ^ (h4 >>> 19), 2716044179);
+        return [(h1 ^ h2 ^ h3 ^ h4) >>> 0, (h2 ^ h1) >>> 0, (h3 ^ h1) >>> 0, (h4 ^ h1) >>> 0];
+    }
+
+
+    function sfc32_c(a, b, c, d) {
+        a >>>= 0;
+        b >>>= 0;
+        c >>>= 0;
+        d >>>= 0;
+        let t = (a + b) | 0;
+        a = b ^ b >>> 9;
+        b = c + (c << 3) | 0;
+        c = (c << 21 | c >>> 11);
+        d = d + 1 | 0;
+        t = t + d | 0;
+        c = c + t | 0;
+        return (t >>> 0) / 4294967296;
+    }
+
+    function consistentRand(seed, l, r) {
+        const rand = sfc32_c(...cyrb128(seed.toString()));
+        return l + rand * (r - l)
+    }
+
+
+    function consistentSeed(seed) {
+        return sfc32_c(...cyrb128(seed.toString()));
+    }
+
+
+    function getRandomBool(seed, l, r) {
+        const rand = sfc32_c(...cyrb128(seed.toString()));
+        return rand < 0.5 ? l : r
+    }
+
+    function traits(arrAttrs, seed){
+
+        let trs = [];
+        let indexMin = 0;
+
+
+        for(let i = 0; i<arrAttrs.length; i++){
+            indexMin += arrAttrs[i][1]
+            trs[i] = indexMin;
+        }
+
+        const ftrs = Math.floor(consistentRand(seed, 0, indexMin));
+        for(let i = 0; i < trs.length; i++){
+
+            if(ftrs < trs[i]){
+                return arrAttrs[i]
+            }
+
+        }
+
+    }
+
+    //end core functions
+
+    function setup() {
+        createCanvas(400, 400);
+    }
+
+    function draw() {
+        background(220);
+    }
+
+</script>
+<main>
+</main>
+</body>
+</html>
