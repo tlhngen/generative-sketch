@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>The Art of Geological Landscapes</title>
+    <!--input name art-->
+
+    <!--
+    Generative supports the most popular creative coding libraries. Simply uncomment the library you want to use below.
+    Are we missing an important library? Let us know @generative_xyz.
+    -->
+    <script
+            sandbox="allow-scripts"
+            type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"
+    ></script>
+
+    <!-- c2.min.js@1.0.0
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdn.generative.xyz/ajax/libs/c2/1.0.0/c2.min.js"></script>
+    -->
+
+    <!-- chromajs@2.4.2
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/chroma-js/2.4.2/chroma.min.js"></script>
+    -->
+
+    <!-- p5.grain.js@0.6.1
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdn.generative.xyz/ajax/libs/p5.grain/0.6.1/p5.grain.min.js"></script>
+    -->
+
+    <!-- threejs@r124
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r124/three.min.js"></script>
+    -->
+
+    <!-- tonejs@14.8.49
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    -->
+
+    <!-- svgjs@3.1.2
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/3.1.2/svg.min.js"></script>
+    -->
+
+    <!-- aframejs@1.2.0
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/aframe/1.2.0/aframe.min.js"></script>
+    -->
+
+    <!-- babylonjs@5.47.0
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babylonjs/5.47.0/babylon.js"></script>
+    -->
+
+    <!-- paperjs@0.12.17
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/paper.js/0.12.17/paper-full.min.js"></script>
+    -->
+
+    <!-- regljs@2.1.0
+    <script sandbox="allow-scripts" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.0/regl.min.js"></script>
+    -->
+
+    <script type="text/javascript">
+        // ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ Add your script here ↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+        //
+        //
+        //
+        // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ Add your script here ↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+    </script>
+
+    <script id="snippet-random-code" type="text/javascript">
+        // DO NOT EDIT THIS SECTION
+
+        let seed = window.location.href.split("/").find((t) => t.includes("i0"));
+
+        if (seed == null) {
+            const alphabet = "0123456789abcdefghijklmnopqrstuvwsyz";
+            seed =
+                new URLSearchParams(window.location.search).get("seed") ||
+                Array(64)
+                    .fill(0)
+                    .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
+                    .join("") + "i0";
+        } else {
+            let pattern = "seed=";
+            for (let i = 0; i < seed.length - pattern.length; ++i) {
+                if (seed.substring(i, i + pattern.length) === pattern) {
+                    seed = seed.substring(i + pattern.length);
+                    break;
+                }
+            }
+        }
+
+        function cyrb128($) {
+            let _ = 1779033703,
+                u = 3144134277,
+                i = 1013904242,
+                l = 2773480762;
+            for (let n = 0, r; n < $.length; n++)
+                (_ = u ^ Math.imul(_ ^ (r = $.charCodeAt(n)), 597399067)),
+                    (u = i ^ Math.imul(u ^ r, 2869860233)),
+                    (i = l ^ Math.imul(i ^ r, 951274213)),
+                    (l = _ ^ Math.imul(l ^ r, 2716044179));
+            return (
+                (_ = Math.imul(i ^ (_ >>> 18), 597399067)),
+                    (u = Math.imul(l ^ (u >>> 22), 2869860233)),
+                    (i = Math.imul(_ ^ (i >>> 17), 951274213)),
+                    (l = Math.imul(u ^ (l >>> 19), 2716044179)),
+                    [(_ ^ u ^ i ^ l) >>> 0, (u ^ _) >>> 0, (i ^ _) >>> 0, (l ^ _) >>> 0]
+            );
+        }
+
+        function sfc32($, _, u, i) {
+            return function () {
+                (u >>>= 0), (i >>>= 0);
+                let l = (($ >>>= 0) + (_ >>>= 0)) | 0;
+                return (
+                    ($ = _ ^ (_ >>> 9)),
+                        (_ = (u + (u << 3)) | 0),
+                        (u =
+                            ((u = (u << 21) | (u >>> 11)) +
+                                (l = (l + (i = (i + 1) | 0)) | 0)) |
+                            0),
+                    (l >>> 0) / 4294967296
+                );
+            };
+        }
+
+        // IMPORTANT: Instead of Math.random(), use this function mathRand() for random number generation.
+        // This function generates a random number between 0 and 1 with on-chain seed.
+
+        let mathRand = sfc32(...cyrb128(seed));
+    </script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        canvas {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            position: fixed;
+            display: block;
+            margin: auto;
+            overflow: auto;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+
+<body>
+<script type="text/javascript">
+    const chainHash = mathRand();
+    const colors = [
+        [
+            [
+                "#A88C8C",
+                "#C7B198",
+                "#DED7AA",
+                "#9C8B7C",
+                "#6B4E3F",
+                "#4A3A32",
+                "#2E2D28",
+                "#CDC5B4",
+                "#7B7162",
+                "#F5F5DC"
+            ],
+            3,
+            "Fluorite",
+        ],
+        [
+            [
+                "#1a1c20",
+                "#434452",
+                "#686c73",
+                "#98a1a9",
+                "#c0c6cc",
+                "#f1f3f5",
+                "#f8f9fa",
+                "#d4d6d8",
+                "#a7a9ac",
+                "#7f8286",
+            ],
+            10,
+            "Moon",
+        ],
+        [
+            [
+                "#F88379",
+                "#FFC07F",
+                "#FFD27F",
+                "#D6C07F",
+                "#A2A79E",
+                "#87888C",
+                "#C46D5E",
+                "#9B6A6C",
+                "#695F56",
+                "#E6E2D3"
+            ],
+            24,
+            "Serenity",
+        ],
+        [
+            [
+                "#547C8C",
+                "#8ABCC1",
+                "#B2D7D0",
+                "#D0E7DE",
+                "#EDE3E3",
+                "#B9A9A9",
+                "#C3B1A3",
+                "#F4F4F4",
+                "#4E4F4F",
+                "#C2BDB8"
+            ],
+            18,
+            "Rainbow",
+        ],
+        [
+            [
+                "#333333",
+                "#4F4F4F",
+                "#828282",
+                "#A8A8A8",
+                "#C7C7C7",
+                "#F7F7F7",
+                "#4D4D4D",
+                "#686868",
+                "#959595",
+                "#BFBFBF"],
+            42,
+            "Auberon",
+        ],
+        [
+            [
+                "#83d0f2",
+                "#5ab6e6",
+                "#378fc7",
+                "#2d748e",
+                "#23605e",
+                "#1a4731",
+                "#1e4d2b",
+                "#0d3e2c",
+                "#072c23",
+                "#040c05",
+            ],
+            53,
+            "Hydrological",
+        ],
+        [
+            [
+                "#F67E7D",
+                "#FAAA89",
+                "#FEDC8C",
+                "#F7ECC0",
+                "#B5A27F",
+                "#8E705A",
+                "#5A423F",
+                "#543D3D",
+                "#F7D2B2",
+                "#5F5F5F"
+            ],
+            68,
+            "Playful",
+        ],
+        [
+            [
+                "#D93829",
+                "#E2AD2A",
+                "#F2D16B",
+                "#A9B4A9",
+                "#7E7E7E",
+                "#CFCFCF",
+                "#F5F5F5",
+                "#ADADAD",
+                "#D0C2B7",
+                "#C38367"
+            ],
+            72,
+            "Frozen",
+        ],
+        [
+            [
+                "#6b2737",
+                "#9b4e30",
+                "#bf6e30",
+                "#f2a640",
+                "#ffdb58",
+                "#c2b280",
+                "#8b9a5a",
+                "#556b2f",
+                "#264d3c",
+                "#1e4440",
+            ],
+            81,
+            "Earth's Encounter",
+        ],
+    ];
+
+    let dh = [
+        [[0, 0.1], 32, "Plain"],
+        [[0.3, 0.4], 12, "Hill"],
+        [[0.6, 0.7], 3, "Mountain"],
+    ];
+
+    let breakLine = [[5, 17, "Faults"], [10, 2, "Fissures"]];
+
+    let age = [
+        [[2, 4], 68, "Cenozoic"],
+        [[4, 6], 32, "Mesozoic"],
+        [[6, 8], 15, "Paleozoic"],
+        [[8, 10], 2, "Precambrian"],
+    ];
+
+    let human = [
+        ["none", 68, "Unknow"],
+        [
+            [
+                [],
+                1,
+                0.01,
+                -.5, // break line
+            ],
+            1,
+            "James Hutton",
+        ],
+        [
+            [
+                [],
+                2, // age
+                0.05, // mount type
+                -1, // break line
+            ],
+            12,
+            "Charles Lyell",
+        ],
+        [
+            [
+                [],
+                3, // age
+                0.1, // mount type
+                -1.5, // break line
+            ],
+            17,
+            "Alfred Wegener",
+        ],
+        [
+            [
+                [],
+                4, // age
+                0.15, // mount type
+                -2, // break line
+            ],
+            32,
+            "Mary Anning",
+        ],
+        [
+            [
+                [],
+                5, // age
+                0.2, // mount type
+                -2.5, // break line
+            ],
+            43,
+            "Tuzo Wilson",
+        ],
+    ];
+
+    let _quantity, att_dh;
+
+    let start = 400;
+    let noiseScale = 0.006;
+    let randomWeight, qrr;
+
+    let randomBreakline, randomDh, sapce, indexColor;
+
+    // ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ Add traits here ↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+    function cyrb128(str) {
+        let h1 = 1779033703,
+            h2 = 3144134277,
+            h3 = 1013904242,
+            h4 = 2773480762;
+        for (let i = 0, k; i < str.length; i++) {
+            k = str.charCodeAt(i);
+            h1 = h2 ^ Math.imul(h1 ^ k, 597399067);
+            h2 = h3 ^ Math.imul(h2 ^ k, 2869860233);
+            h3 = h4 ^ Math.imul(h3 ^ k, 951274213);
+            h4 = h1 ^ Math.imul(h4 ^ k, 2716044179);
+        }
+        h1 = Math.imul(h3 ^ (h1 >>> 18), 597399067);
+        h2 = Math.imul(h4 ^ (h2 >>> 22), 2869860233);
+        h3 = Math.imul(h1 ^ (h3 >>> 17), 951274213);
+        h4 = Math.imul(h2 ^ (h4 >>> 19), 2716044179);
+        return [
+            (h1 ^ h2 ^ h3 ^ h4) >>> 0,
+            (h2 ^ h1) >>> 0,
+            (h3 ^ h1) >>> 0,
+            (h4 ^ h1) >>> 0,
+        ];
+    }
+
+    function sfc32_c(a, b, c, d) {
+        a >>>= 0;
+        b >>>= 0;
+        c >>>= 0;
+        d >>>= 0;
+        let t = (a + b) | 0;
+        a = b ^ (b >>> 9);
+        b = (c + (c << 3)) | 0;
+        c = (c << 21) | (c >>> 11);
+        d = (d + 1) | 0;
+        t = (t + d) | 0;
+        c = (c + t) | 0;
+        return (t >>> 0) / 4294967296;
+    }
+
+    function consistentRand(seed, l, r) {
+        const rand = sfc32_c(...cyrb128(seed.toString()));
+        return l + rand * (r - l);
+    }
+
+    function consistentSeed(seed) {
+        return sfc32_c(...cyrb128(seed.toString()));
+    }
+
+    function getRandomBool(seed, l, r) {
+        const rand = sfc32_c(...cyrb128(seed.toString()));
+        return rand < 0.5 ? l : r;
+    }
+
+    function traits(arrAttrs, seed) {
+        let trs = [];
+        let indexMin = 0;
+
+        for (let i = 0; i < arrAttrs.length; i++) {
+            indexMin += arrAttrs[i][1];
+            trs[i] = indexMin;
+        }
+
+        const ftrs = Math.floor(consistentRand(seed, 0, indexMin));
+        for (let i = 0; i < trs.length; i++) {
+            if (ftrs < trs[i]) {
+                return arrAttrs[i];
+            }
+        }
+    }
+
+    //end core functions
+    const outx = traits(colors, consistentSeed(chainHash));
+    const typeDh = traits(dh, consistentSeed(chainHash * 10));
+    const att_old = traits(age, consistentSeed(chainHash * 1000));
+    const att_h = traits(human, consistentSeed(chainHash * 100000));
+    att_break = traits(breakLine, consistentSeed(100 * chainHash));
+
+    // window.$generativeTraits contain list traits for token
+    // you need to populate a $generativeTraits object in the window object
+    window.$generativeTraits = {
+        "Palette": outx[2],
+        'Topography': typeDh[2],
+        "Continental Rifting": att_break[2],
+        "Era": att_old[2],
+        "Famous Geologists": att_h[2],
+    };
+
+    console.log(window.$generativeTraits);
+
+    function setup() {
+        start = 800;//Math.min(innerWidth, innerHeight);
+        createCanvas(1200, 800);
+        randomSeed(consistentSeed(chainHash * 10000) * 100);
+        noiseSeed(consistentSeed(chainHash * 100000) * 10);
+
+        _quantity = Math.floor(
+            consistentRand(
+                consistentSeed(chainHash),
+                att_old[0][0],
+                att_old[0][1] + (att_h[0] !== 'none' ? att_h[0][1] : 0)
+            )
+        );
+
+        randomBreakline = att_break[0] + ("none" !== att_h[0] ? att_h[0][3] : 0);
+        randomDh = consistentRand(
+            consistentSeed(chainHash),
+            typeDh[0][0],
+            typeDh[0][1] + (att_h[0] !== 'none' ? att_h[0][2] : 0)
+        )
+
+        att_dh = map(randomDh, 0, 1, -height * .5, -height * 1.5);
+        space = map(_quantity, 5, 25, height / 5, height / 25);
+        indexColor = 0;
+        qrr = [];
+
+        centerPointer = (height + ((_quantity - 1) * space)) / 2;
+        createLines();
+    }
+
+    function createLines(x) {
+
+        const wStart = 0;
+        const wEnd = width;
+
+        // for (let x = wStart; x < wEnd; x += 1) {
+
+        let iCo = 9;
+        for (let i = 0; i <= _quantity; i++) {
+
+            const startNoise = noise(x * noiseScale);
+            const noiseVal_1 = (startNoise * map(startNoise, 0, 1, -att_dh, att_dh)) + centerPointer;
+
+            const startNoise_2 = noise((x + 1) * noiseScale);
+            const noiseVal_2 =
+                startNoise_2 * map(startNoise_2, 0, 1, -att_dh, att_dh) + centerPointer;
+
+            randomWeight = map(noise(i + x * 0.2), 0, 1, 0.2, 1) * 5;
+
+            const getY_1 = i === _quantity ? 0 : noiseVal_1 - (i * space);
+            const getY_2 = noiseVal_2 - (i * space);
+
+            const getY_1_next = i === 0 ? height : noiseVal_1 - ((i - 1) * space);
+            const nStart = getY_1 - randomWeight + 0;
+            const nEnd = getY_1_next - randomWeight + (i === 0 ? +5 : 0);
+
+            for (let bh = nStart; bh < nEnd; bh += Math.floor(randomBreakline / 2)) {
+
+                const nx = noise(x, bh);
+                const nx2 = noise(x, bh + x);
+
+                const wI = 5 * nx;
+                const shapeRan = getRandomBool(x + i + bh, true, false)
+
+                stroke(outx[0][iCo]);
+                strokeWeight(wI);
+                fill(outx[0][Math.floor(random(_quantity))]);
+
+                const _size = (randomWeight * nx2 * randomBreakline / 2);
+                const _x = x + (map(nx, 0, 1., -_size + randomWeight, _size + randomWeight));
+                const _y = bh;
+
+                if (shapeRan) {
+                    // qrr.push({
+                    //     type: 'circle',
+                    //     x: x + (map(nx, 0, 1., -randomWeight, randomWeight)),
+                    //     y: bh,
+                    //     size: (randomWeight * nx2 * randomBreakline),
+                    //     stroke: outx[0][iCo],
+                    //     strokeW: wI,
+                    //     fill: outx[0][Math.floor(random(_quantity))]
+                    // });
+
+                    circle(_x, _y, _size);
+                } else {
+
+                    // qrr.push({
+                    //     type: 'rect',
+                    //     x: x + (map(nx, 0, 1., -randomWeight, randomWeight)),
+                    //     y: bh,
+                    //     size: (randomWeight * nx2 * randomBreakline),
+                    //     stroke: outx[0][iCo],
+                    //     strokeW: wI,
+                    //     fill: outx[0][Math.floor(random(_quantity))]
+                    // });
+
+                    rect(_x, _y, _size, _size);
+                }
+
+            }
+
+            iCo--;
+            if (iCo < 0) {
+                iCo = 9;
+            }
+        }
+        // }
+    }
+
+    function draw() {
+
+        if (frameCount - 1 < width)
+            createLines(frameCount - 1);
+        // for (let i = 0; i < qrr.length; i++) {
+        //     const r = qrr[i];
+        //     if (r) {
+        //         stroke(r.stroke);
+        //         strokeWeight(r.strokeW);
+        //         if (r.type === 'circle') {
+        //             fill(r.fill);
+        //             circle(r.x, r.y, r.size);
+        //         } else {
+        //             fill(r.fill);
+        //             rect(r.x, r.y, r.size);
+        //         }
+        //     }
+        // }
+    }
+
+    function windowResized() {
+
+        location.reload();
+    }
+
+    function keyPressed() {
+        if (key === "s") {
+            save("geological-landscapes.jpg");
+        }
+    }
+</script>
+<main></main>
+</body>
+</html>
